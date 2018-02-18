@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+@import "app/app.component.scss";
+.card .tree-node {
+  margin: 6px;
+  padding: 3px;
+}
+.node-content-wrapper {
+  width: 100%;
+  text-align: left;
+}

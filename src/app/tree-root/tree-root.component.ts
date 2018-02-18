@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ITreeOptions } from 'angular-tree-component';
 
 @Component({
   selector: 'app-tree-root',
-  templateUrl: './tree-root.component.html',
-  styleUrls: ['./tree-root.component.css']
+  templateUrl: './tree-root.component.html'
 })
 export class TreeRootComponent implements OnInit {
 
@@ -33,7 +33,18 @@ export class TreeRootComponent implements OnInit {
       ]
     }
   ];
-  options = {};
+
+  options: ITreeOptions = {
+    allowDrag: (node) => {
+      console.log(node.getLastRoot);
+      return true;
+    },
+    animateExpand: true,
+    nodeClass: (node) => {
+      return 'card';
+    },
+    useCheckbox: true
+  };
 
   ngOnInit() {
   }
