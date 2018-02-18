@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ITreeOptions } from 'angular-tree-component';
+import { AngularFireDatabase } from 'angularfire2/database'; // 追加
+import { Observable } from 'rxjs/Observable'; // 追加
 
 @Component({
   selector: 'app-tree-root',
@@ -7,8 +9,7 @@ import { ITreeOptions } from 'angular-tree-component';
 })
 export class TreeRootComponent implements OnInit {
 
-  constructor() { }
-
+  item: Observable<{}>; // 追加
   nodes = [
     {
       id: 1,
@@ -36,7 +37,6 @@ export class TreeRootComponent implements OnInit {
 
   options: ITreeOptions = {
     allowDrag: (node) => {
-      console.log(node.getLastRoot);
       return true;
     },
     animateExpand: true,
@@ -45,6 +45,11 @@ export class TreeRootComponent implements OnInit {
     },
     useCheckbox: true
   };
+
+
+  constructor(db: AngularFireDatabase) {
+    this.item = db.object('item').valueChanges();
+  }
 
   ngOnInit() {
   }
