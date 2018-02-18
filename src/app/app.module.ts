@@ -3,14 +3,18 @@ import { NgModule } from '@angular/core';
 
 
 import { AppComponent } from './app.component';
+import { TreeRootComponent } from './tree-root/tree-root.component';
+import { TreeModule } from 'angular-tree-component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TreeRootComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    TreeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
