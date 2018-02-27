@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ITreeOptions } from 'angular-tree-component';
-import { AngularFireDatabase } from 'angularfire2/database'; // 追加
+import { AngularFireDatabase, AngularFireList } from 'angularfire2/database'; // 追加
 import { Observable } from 'rxjs/Observable'; // 追加
 
 @Component({
@@ -9,31 +9,33 @@ import { Observable } from 'rxjs/Observable'; // 追加
 })
 export class TreeRootComponent implements OnInit {
 
-  item: Observable<{}>; // 追加
-  nodes = [
-    {
-      id: 1,
-      name: 'root1',
-      children: [
-        { id: 2, name: 'child1' },
-        { id: 3, name: 'child2' }
-      ]
-    },
-    {
-      id: 4,
-      name: 'root2',
-      children: [
-        { id: 5, name: 'child2.1' },
-        {
-          id: 6,
-          name: 'child2.2',
-          children: [
-            { id: 7, name: 'subsub' }
-          ]
-        }
-      ]
-    }
-  ];
+  nodesRef: AngularFireList<{}>;
+  nodes: Observable<any[]>;
+
+  // nodes = [
+  //   {
+  //     id: 1,
+  //     name: 'root1',
+  //     children: [
+  //       { id: 2, name: 'child1' },
+  //       { id: 3, name: 'child2' }
+  //     ]
+  //   },
+  //   {
+  //     id: 4,
+  //     name: 'root2',
+  //     children: [
+  //       { id: 5, name: 'child2.1' },
+  //       {
+  //         id: 6,
+  //         name: 'child2.2',
+  //         children: [
+  //           { id: 7, name: 'subsub' }
+  //         ]
+  //       }
+  //     ]
+  //   }
+  // ];
 
   options: ITreeOptions = {
     allowDrag: (node) => {
@@ -48,7 +50,8 @@ export class TreeRootComponent implements OnInit {
 
 
   constructor(db: AngularFireDatabase) {
-    this.item = db.object('item').valueChanges();
+    this.nodesRef = db.list('/nodes');
+    this.nodes = this.nodesRef.valueChanges();
   }
 
   ngOnInit() {
