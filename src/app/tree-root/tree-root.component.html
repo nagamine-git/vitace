@@ -1,6 +1,6 @@
-<tree-root [node]="nodes | async" [options]="options">
+<tree-root [nodes]="(nodes | async)" [options]="options">
   <ng-template #treeNodeTemplate let-node let-index="index">
-    <div>{{ node.name }}</div>
+    <div>{{ node.data.name }}</div>
   </ng-template>
 </tree-root>
 <!-- <div *ngFor='let node of nodes | async'>
