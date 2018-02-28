@@ -9,8 +9,8 @@ import { Observable } from 'rxjs/Observable'; // 追加
 })
 export class TreeRootComponent implements OnInit {
 
-  nodesRef: AngularFireList<{}>;
-  nodes: Observable<any[]>;
+  storiesRef: AngularFireList<{}>;
+  stories: Observable<any[]>;
 
   // nodes = [
   //   {
@@ -50,8 +50,8 @@ export class TreeRootComponent implements OnInit {
 
 
   constructor(db: AngularFireDatabase) {
-    this.nodesRef = db.list('/nodes');
-    this.nodes = this.nodesRef.valueChanges();
+    this.storiesRef = db.list('/boards/0/stories');
+    this.stories = this.storiesRef.valueChanges();
   }
 
   ngOnInit() {
