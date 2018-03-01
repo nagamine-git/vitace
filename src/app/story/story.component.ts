@@ -11,7 +11,6 @@ export class StoryComponent implements OnInit {
 
   storiesRef: AngularFireList<{}>;
   stories: Observable<any[]>;
-
   options: ITreeOptions = {
     allowDrag: (node) => {
       return true;
@@ -26,10 +25,12 @@ export class StoryComponent implements OnInit {
   constructor(db: AngularFireDatabase) {
     this.storiesRef = db.list('/boards/0/stories');
     this.stories = this.storiesRef.valueChanges();
-    console.log(this.stories);
   }
 
   ngOnInit() {
   }
 
+  save() {
+    this.storiesRef.push({'name': 'hogehoge'});
+  }
 }
