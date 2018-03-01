@@ -10,14 +10,14 @@ import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
-import { TreeRootComponent } from './tree-root/tree-root.component';
+import { StoryComponent } from './story/story.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     NavBarComponent,
-    TreeRootComponent
+    StoryComponent
   ],
   imports: [
     BrowserModule,
