@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ITreeOptions } from 'angular-tree-component';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database'; // 追加
 import { Observable } from 'rxjs/Observable'; // 追加
+import { Story } from './story';
 
 @Component({
   selector: 'app-story',
@@ -9,6 +10,7 @@ import { Observable } from 'rxjs/Observable'; // 追加
 })
 export class StoryComponent implements OnInit {
 
+  name: String = '';
   storiesRef: AngularFireList<{}>;
   stories: Observable<any[]>;
   options: ITreeOptions = {
@@ -30,7 +32,12 @@ export class StoryComponent implements OnInit {
   ngOnInit() {
   }
 
-  save() {
-    this.storiesRef.push({'name': 'hogehoge'});
+  save(name) {
+    this.storiesRef.push({'name': this.name})
+    .then(() => this.name = '');
+  }
+
+  changeValue(name) {
+    this.name = name;
   }
 }
