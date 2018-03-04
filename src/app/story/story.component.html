@@ -1,7 +1,9 @@
-<input [(ngModel)]="name" (keydown.alt.enter)=save(tree) (keyup)="changeValue($event.target.value)" [value]="name" placeholder="Alt + Enter => Save">
-<button (click)="save(tree)">Save Story</button>
-<button (click)="expandAll(tree)">Expand All</button>
-<button (click)="collapseAll(tree)">Collapse All</button>
+<div class="row">
+  <input mdbActive type="text" class="form-control col-12" [(ngModel)]="name" (keydown.alt.enter)=save(tree) (keyup)="changeValue($event.target.value)" [value]="name" placeholder="Alt + Enter => Save">
+</div>
+<button (click)="save(tree)" type="button" class="btn btn-primary waves-light col-2" mdbRippleRadius>Save Story</button>
+<button (click)="expandAll(tree)" type="button" class="btn btn-outline-primary" mdbRippleRadius>Expand All</button>
+<button (click)="collapseAll(tree)" type="button" class="btn btn-outline-primary" mdbRippleRadius>Collapse All</button>
 <tree-root #tree [nodes]="(stories | async)" [options]="options" (moveNode)="updateTree(tree)" class="tree-view">
   <ng-template #treeNodeTemplate let-story let-index="index">
     <div>
