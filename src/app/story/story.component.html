@@ -1,4 +1,7 @@
+<input [(ngModel)]="name" (keydown.alt.enter)=save(tree) (keyup)="changeValue($event.target.value)" [value]="name" placeholder="Alt + Enter => Save">
+<button (click)="save(tree)">Save Story</button>
 <button (click)="expandAll(tree)">Expand All</button>
+<button (click)="collapseAll(tree)">Collapse All</button>
 <tree-root #tree [nodes]="(stories | async)" [options]="options" (moveNode)="updateTree(tree)">
   <ng-template #treeNodeTemplate let-story let-index="index">
     <div>
@@ -7,8 +10,5 @@
   </div>
   </ng-template>
 </tree-root>
-
-<input [(ngModel)]="name" (keydown.alt.enter)=save(tree) (keyup)="changeValue($event.target.value)" [value]="name" placeholder="Alt + Enter => Save">
-<button (click)="save(tree)">Save Story</button>
 
 <!-- <input (keyup)=checkKey($event)  placeholder="for Debug"> -->

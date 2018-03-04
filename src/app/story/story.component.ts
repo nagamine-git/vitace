@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ITreeOptions, TreeComponent } from 'angular-tree-component';
-import { AngularFireDatabase, AngularFireList } from 'angularfire2/database'; // 追加
-import { Observable } from 'rxjs/Observable'; // 追加
+import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import { Observable } from 'rxjs/Observable';
 import { Story } from './story';
 
 @Component({
@@ -19,9 +19,6 @@ export class StoryComponent implements OnInit {
     allowDrag: (node) => {
       return true;
     },
-    allowDrop: (node) => {
-      return true;
-    },
     animateExpand: true,
     nodeClass: (node) => {
       return 'card';
@@ -31,6 +28,7 @@ export class StoryComponent implements OnInit {
   };
 
   constructor(db: AngularFireDatabase) {
+    this.storiesBoard = db.list('/boards/0');
     this.storiesRef = db.list('/boards/0/stories');
     this.stories = this.storiesRef.valueChanges();
   }
@@ -40,8 +38,8 @@ export class StoryComponent implements OnInit {
 
   save(tree) {
     tree.treeModel.nodes.push({name: this.name});
-    tree.treeModel.update();
     this.storiesBoard.set( 'stories', tree.treeModel.nodes)
+    .then(() => tree.treeModel.update())
     .then(() => this.name = '');
   }
 
@@ -110,5 +108,9 @@ export class StoryComponent implements OnInit {
 
   expandAll (tree) {
     tree.treeModel.expandAll();
+  }
+
+  collapseAll (tree) {
+    tree.treeModel.collapseAll();
   }
 }
