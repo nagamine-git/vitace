@@ -47,21 +47,30 @@ export class StoryComponent implements OnInit {
     this.name = name;
   }
 
-  changeStoryName(name, tree, selected_node) {
-    function changeNameRoop(root_ary) { root_ary.forEach(root_node => {
-      if (root_node._id === selected_node._id) {
-        root_node['name'] = name;
-        return true;
-      } else if (root_node['children']) {
-        changeNameRoop(root_node['children']);
-      } else if (root_node === root_ary[root_ary.length - 1] ) {
-        return false;
+  changeStoryName(name, tree, selected_node, current_node) {
+    let current_node_location = '';
+    function changeNameRoop(root_ary) {
+      for (let i = 0; i < root_ary.length; i++) {
+        if (root_ary[i]._id === selected_node._id) {
+          root_ary[i]['name'] = name;
+          current_node_location += String('x');
+          sessionStorage.setItem('current_node', String(current_node_location));
+          return true;
+        } else if (root_ary[i]['children']) {
+          current_node_location += String('x');
+          changeNameRoop(root_ary[i]['children']);
+        } else if (root_ary[i] === root_ary[root_ary.length - 1] ) {
+          current_node_location += String('x');
+          return false;
+        } else {
+          current_node_location += String('y');
+        }
       }
-     });
     }
     changeNameRoop(tree.treeModel.nodes);
     this.storiesBoard.set( 'stories', tree.treeModel.nodes);
     tree.treeModel.update();
+    console.log((sessionStorage.getItem('current_node')));
   }
 
   deleteStory(tree, selected_node) {
@@ -97,7 +106,6 @@ export class StoryComponent implements OnInit {
   }
 
   updateTree(tree) {
-    console.log(tree.treeModel.nodes);
     this.storiesBoard.set( 'stories', tree.treeModel.nodes);
     tree.treeModel.update();
   }
