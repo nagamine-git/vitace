@@ -1,3 +1,4 @@
+<button (click)="expandAll(tree)">Expand All</button>
 <tree-root #tree [nodes]="(stories | async)" [options]="options" (moveNode)="updateTree(tree)">
   <ng-template #treeNodeTemplate let-story let-index="index">
     <div>

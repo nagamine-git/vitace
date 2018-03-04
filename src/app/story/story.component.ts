@@ -107,4 +107,8 @@ export class StoryComponent implements OnInit {
   checkKey ($event) {
     console.log($event);
   }
+
+  expandAll (tree) {
+    tree.treeModel.expandAll();
+  }
 }
