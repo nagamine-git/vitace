@@ -48,22 +48,23 @@ export class StoryComponent implements OnInit {
   }
 
   changeStoryName(name, tree, selected_node, current_node) {
-    let current_node_location = '';
+    let current_node_location = [];
+    let current_node_save = '';
     function changeNameRoop(root_ary) {
       for (let i = 0; i < root_ary.length; i++) {
         if (root_ary[i]._id === selected_node._id) {
           root_ary[i]['name'] = name;
-          current_node_location += String('x');
+          current_node_location.push([i]);
           sessionStorage.setItem('current_node', String(current_node_location));
           return true;
         } else if (root_ary[i]['children']) {
-          current_node_location += String('x');
+          current_node_location.push([i]);
           changeNameRoop(root_ary[i]['children']);
         } else if (root_ary[i] === root_ary[root_ary.length - 1] ) {
-          current_node_location += String('x');
+          current_node_location.push([i]);
           return false;
         } else {
-          current_node_location += String('y');
+          current_node_location.push([i]);
         }
       }
     }
