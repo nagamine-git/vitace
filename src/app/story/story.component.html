@@ -1,6 +1,7 @@
 <tree-root #tree [nodes]="(stories | async)" [options]="options" >
   <ng-template #treeNodeTemplate let-story let-index="index">
-    <input [(ngModel)]="story.data.name" (keyup)="changeStoryName($event.target.value, tree, $event)" [value]="story.data.name">
+    <input [(ngModel)]="story.data.name" (keyup)="changeStoryName($event.target.value, tree, story.data)" [value]="story.data.name">
+    <button (click)="deleteStory(tree, story.data)">DeleteTree</button>
   </ng-template>
 </tree-root>
 

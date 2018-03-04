@@ -47,24 +47,58 @@ export class StoryComponent implements OnInit {
     this.name = name;
   }
 
-  changeStoryName(name, tree, $event) {
-    function changeNameRoop(children_ary) { children_ary.forEach(child_node => {
-      if (child_node._id === tree.treeModel.focusedNodeId) {
-        child_node['name'] = name;
+  changeStoryName(name, tree, selected_node) {
+    function changeNameRoop(root_ary) { root_ary.forEach(root_node => {
+      if (root_node._id === selected_node._id) {
+        root_node['name'] = name;
         return true;
-      } else if (child_node['children']) {
-        changeNameRoop(child_node['children']);
-      } else if (child_node === children_ary[children_ary.lenght - 1] ) {
+      } else if (root_node['children']) {
+        changeNameRoop(root_node['children']);
+      } else if (root_node === root_ary[root_ary.length - 1] ) {
         return false;
       }
      });
     }
     changeNameRoop(tree.treeModel.nodes);
     this.storiesBoard.set( 'stories', tree.treeModel.nodes);
+    tree.treeModel.update();
+  }
+
+  deleteStory(tree, selected_node) {
+    function deleteStoryRoop(root_ary, parent_node) { root_ary.forEach(root_node => {
+      let parent_ary;
+      if (parent_node.children) {
+        parent_ary = parent_node.children;
+      } else {
+        parent_ary = parent_node;
+      }
+      if (root_node._id === selected_node._id) {
+        for (let i = 0; i < parent_ary.length; i++) {
+          if (parent_ary[i]._id === selected_node._id) {
+            parent_ary = parent_ary.splice(i, 1);
+            if (parent_ary.length === 1) {
+              parent_ary = null;
+              return true;
+            }
+            return true;
+          }
+        }
+        return true;
+      } else if (root_node['children']) {
+        deleteStoryRoop(root_node['children'], root_node);
+      } else if (root_node === root_ary[root_ary.length - 1] ) {
+        return false;
+      }
+     });
+    }
+    deleteStoryRoop(tree.treeModel.nodes, tree.treeModel.nodes);
+    this.storiesBoard.set( 'stories', tree.treeModel.nodes);
+    tree.treeModel.update();
   }
 
   updateTree(tree) {
     console.log(tree.treeModel.nodes);
     this.storiesBoard.set( 'stories', tree.treeModel.nodes);
+    tree.treeModel.update();
   }
 }
