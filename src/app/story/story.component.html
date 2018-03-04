@@ -2,7 +2,7 @@
 <button (click)="save(tree)">Save Story</button>
 <button (click)="expandAll(tree)">Expand All</button>
 <button (click)="collapseAll(tree)">Collapse All</button>
-<tree-root #tree [nodes]="(stories | async)" [options]="options" (moveNode)="updateTree(tree)">
+<tree-root #tree [nodes]="(stories | async)" [options]="options" (moveNode)="updateTree(tree)" class="tree-view">
   <ng-template #treeNodeTemplate let-story let-index="index">
     <div>
     <input [(ngModel)]="story.data.name" (keyup)="changeStoryName($event.target.value, tree, story.data)" [value]="story.data.name">
