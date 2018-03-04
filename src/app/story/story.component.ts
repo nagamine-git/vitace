@@ -19,6 +19,9 @@ export class StoryComponent implements OnInit {
     allowDrag: (node) => {
       return true;
     },
+    allowDrop: (node) => {
+      return true;
+    },
     animateExpand: true,
     nodeClass: (node) => {
       return 'card';
@@ -28,7 +31,6 @@ export class StoryComponent implements OnInit {
   };
 
   constructor(db: AngularFireDatabase) {
-    this.storiesBoard = db.list('/boards/0');
     this.storiesRef = db.list('/boards/0/stories');
     this.stories = this.storiesRef.valueChanges();
   }
@@ -100,5 +102,9 @@ export class StoryComponent implements OnInit {
     console.log(tree.treeModel.nodes);
     this.storiesBoard.set( 'stories', tree.treeModel.nodes);
     tree.treeModel.update();
+  }
+
+  checkKey ($event) {
+    console.log($event);
   }
 }

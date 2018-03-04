@@ -1,10 +1,13 @@
-<tree-root #tree [nodes]="(stories | async)" [options]="options" >
+<tree-root #tree [nodes]="(stories | async)" [options]="options" (moveNode)="updateTree(tree)">
   <ng-template #treeNodeTemplate let-story let-index="index">
+    <div>
     <input [(ngModel)]="story.data.name" (keyup)="changeStoryName($event.target.value, tree, story.data)" [value]="story.data.name">
-    <button (click)="deleteStory(tree, story.data)">DeleteTree</button>
+    <button (click)="deleteStory(tree, story.data)">Delete Story</button>
+  </div>
   </ng-template>
 </tree-root>
 
-<input [(ngModel)]="name" (keyup)="changeValue($event.target.value)" [value]="name">
-<button (click)="save(tree)">Save value</button>
-<button (click)="updateTree(tree)">UpdateTree</button>
+<input [(ngModel)]="name" (keydown.alt.enter)=save(tree) (keyup)="changeValue($event.target.value)" [value]="name" placeholder="Alt + Enter => Save">
+<button (click)="save(tree)">Save Story</button>
+
+<!-- <input (keyup)=checkKey($event)  placeholder="for Debug"> -->
