@@ -36,12 +36,6 @@ export class StoryComponent implements OnInit {
   ngOnInit() {
   }
 
-  // save(tree) {
-  //   console.log(Object.keys(tree.treeModel.nodes));
-  //   this.storiesRef.push({'name': this.name})
-  //   .then(() => this.name = '');
-  // }
-
   save(tree) {
     tree.treeModel.nodes.push({name: this.name});
     tree.treeModel.update();
@@ -53,13 +47,22 @@ export class StoryComponent implements OnInit {
     this.name = name;
   }
 
-  // 未完成
-  update(name) {
-    this.storiesRef.update( 'L6fJOmWwvBG93-PXn29', {'name': name});
-    this.stories.subscribe((res: Response) => {
-      console.log(res);
-    });
+  changeStoryName(name, tree, $event) {
+    function changeNameRoop(children_ary) { children_ary.forEach(child_node => {
+      if (child_node._id === tree.treeModel.focusedNodeId) {
+        child_node['name'] = name;
+        return true;
+      } else if (child_node['children']) {
+        changeNameRoop(child_node['children']);
+      } else if (child_node === children_ary[children_ary.lenght - 1] ) {
+        return false;
+      }
+     });
+    }
+    changeNameRoop(tree.treeModel.nodes);
+    this.storiesBoard.set( 'stories', tree.treeModel.nodes);
   }
+
   updateTree(tree) {
     console.log(tree.treeModel.nodes);
     this.storiesBoard.set( 'stories', tree.treeModel.nodes);
