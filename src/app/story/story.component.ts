@@ -48,30 +48,25 @@ export class StoryComponent implements OnInit {
   }
 
   changeStoryName(name, tree, selected_node, current_node) {
-    let current_node_location = [];
-    let current_node_save = '';
+    let end_roop = false;
     function changeNameRoop(root_ary) {
-      for (let i = 0; i < root_ary.length; i++) {
-        if (root_ary[i]._id === selected_node._id) {
-          root_ary[i]['name'] = name;
-          current_node_location.push([i]);
-          sessionStorage.setItem('current_node', String(current_node_location));
-          return true;
-        } else if (root_ary[i]['children']) {
-          current_node_location.push([i]);
-          changeNameRoop(root_ary[i]['children']);
-        } else if (root_ary[i] === root_ary[root_ary.length - 1] ) {
-          current_node_location.push([i]);
-          return false;
-        } else {
-          current_node_location.push([i]);
-        }
-      }
-    }
-    changeNameRoop(tree.treeModel.nodes);
-    this.storiesBoard.set( 'stories', tree.treeModel.nodes);
-    tree.treeModel.update();
-    console.log((sessionStorage.getItem('current_node')));
+      return new Promise(function(resolve, reject) {
+          for (let i = 0; i < root_ary.length && end_roop === false; i++) {
+            if (root_ary[i]._id === selected_node._id) {
+              root_ary[i]['name'] = name;
+              end_roop = true;
+            } else if (root_ary[i]['children']) {
+              changeNameRoop(root_ary[i]['children']);
+            } else if (root_ary[i] === root_ary[root_ary.length - 1] ) {
+              return false;
+            }
+          }
+          resolve(root_ary);
+      });
+  }
+    changeNameRoop(tree.treeModel.nodes)
+    .then((return_tree) => this.storiesBoard.set( 'stories', return_tree))
+    .then(() => tree.treeModel.update());
   }
 
   deleteStory(tree, selected_node) {
