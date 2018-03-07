@@ -1,0 +1,5 @@
+<tree-root [nodes]="nodes" [options]="options">
+  <ng-template #treeNodeTemplate let-node let-index="index">
+    <div>{{ node.data.name }}</div>
+  </ng-template>
+</tree-root>
