@@ -39,8 +39,8 @@ export class StoryComponent implements OnInit {
   save(tree) {
     tree.treeModel.nodes.push({name: this.name});
     this.storiesBoard.set( 'stories', tree.treeModel.nodes)
-    .then(() => tree.treeModel.update())
-    .then(() => this.name = '');
+    .then(() => tree.treeModel.update());
+    this.name = '';
   }
 
   changeValue(name) {
@@ -65,8 +65,7 @@ export class StoryComponent implements OnInit {
       });
   }
     changeNameRoop(tree.treeModel.nodes)
-    .then((return_tree) => this.storiesBoard.set( 'stories', return_tree))
-    .then(() => tree.treeModel.update());
+    .then((return_tree) => this.storiesBoard.set( 'stories', return_tree));
   }
 
   deleteStory(tree, selected_node) {
