@@ -1,5 +1,6 @@
 export class Story {
-  id: number;
-  name: string;
+  id: Number;
+  name: String;
+  done: Boolean = false;
   children: {};
 }

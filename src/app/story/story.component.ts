@@ -10,11 +10,11 @@ import { Story } from './story';
 })
 export class StoryComponent implements OnInit {
 
-  tree: TreeComponent;
-  name: String = '';
   storiesBoard: AngularFireList<{}>;
   storiesRef: AngularFireList<{}>;
   stories: Observable<{}>;
+  tree: TreeComponent;
+  new_story_name: String = '';
   options: ITreeOptions = {
     allowDrag: (node) => {
       return true;
@@ -36,77 +36,74 @@ export class StoryComponent implements OnInit {
   ngOnInit() {
   }
 
-  save(tree) {
-    tree.treeModel.nodes.push({name: this.name});
+  saveNewStory(tree) {
+    tree.treeModel.nodes.push({name: this.new_story_name});
     this.storiesBoard.set( 'stories', tree.treeModel.nodes)
     .then(() => tree.treeModel.update());
-    this.name = '';
+    this.new_story_name = '';
   }
 
-  changeValue(name) {
-    this.name = name;
+  changeNewName(name) {
+    this.new_story_name = name;
   }
 
   changeStoryName(name, tree, selected_node, current_node) {
     let end_roop = false;
-    function changeNameRoop(root_ary) {
-      return new Promise(function(resolve, reject) {
-          for (let i = 0; i < root_ary.length && end_roop === false; i++) {
-            if (root_ary[i]._id === selected_node._id) {
-              root_ary[i]['name'] = name;
-              end_roop = true;
-            } else if (root_ary[i]['children']) {
-              changeNameRoop(root_ary[i]['children']);
-            } else if (root_ary[i] === root_ary[root_ary.length - 1] ) {
-              return false;
-            }
+    function changeStoryNameRoop(root_ary): Promise<any> {
+      return new Promise((resolve, reject) => {
+        for (let i = 0; i < root_ary.length && end_roop === false; i++) {
+          if (root_ary[i]._id === selected_node._id) {
+            root_ary[i]['name'] = name;
+            resolve();
+            end_roop = true;
+          } else if (root_ary[i]['children']) {
+            changeStoryNameRoop(root_ary[i]['children']);
+          } else if (root_ary[i] === root_ary[root_ary.length - 1] ) {
+            return false;
           }
-          resolve(root_ary);
+        }
       });
-  }
-    changeNameRoop(tree.treeModel.nodes)
-    .then((return_tree) => this.storiesBoard.set( 'stories', return_tree));
+    }
+    changeStoryNameRoop(tree.treeModel.nodes)
+    .then(() => this.storiesBoard.set( 'stories', tree.treeModel.nodes));
   }
 
   deleteStory(tree, selected_node) {
-    function deleteStoryRoop(root_ary, parent_node) { root_ary.forEach(root_node => {
-      let parent_ary;
-      if (parent_node.children) {
-        parent_ary = parent_node.children;
-      } else {
-        parent_ary = parent_node;
-      }
-      if (root_node._id === selected_node._id) {
-        for (let i = 0; i < parent_ary.length; i++) {
-          if (parent_ary[i]._id === selected_node._id) {
-            parent_ary = parent_ary.splice(i, 1);
-            if (parent_ary.length === 1) {
-              parent_ary = null;
-              return true;
-            }
-            return true;
-          }
+    function deleteStoryRoop(root_ary, parent_node): Promise<any> {
+      return new Promise((resolve, reject) => {
+        root_ary.forEach(root_node => {
+        let parent_ary;
+        if (parent_node.children) {
+          parent_ary = parent_node.children;
+        } else {
+          parent_ary = parent_node;
         }
-        return true;
-      } else if (root_node['children']) {
-        deleteStoryRoop(root_node['children'], root_node);
-      } else if (root_node === root_ary[root_ary.length - 1] ) {
-        return false;
-      }
+        if (root_node._id === selected_node._id) {
+          for (let i = 0; i < parent_ary.length; i++) {
+            if (parent_ary[i]._id === selected_node._id) {
+              parent_ary = parent_ary.splice(i, 1);
+              if (parent_ary.length === 1) {
+                parent_ary = null;
+                resolve();
+              }
+            }
+          }
+          return true;
+        } else if (root_node['children']) {
+          deleteStoryRoop(root_node['children'], root_node);
+        } else if (root_node === root_ary[root_ary.length - 1] ) {
+          return false;
+        }
+      });
      });
     }
-    deleteStoryRoop(tree.treeModel.nodes, tree.treeModel.nodes);
-    this.storiesBoard.set( 'stories', tree.treeModel.nodes);
-    tree.treeModel.update();
+    deleteStoryRoop(tree.treeModel.nodes, tree.treeModel.nodes)
+    .then(() => this.storiesBoard.set('stories', tree.treeModel.nodes));
   }
 
   updateTree(tree) {
-    this.storiesBoard.set( 'stories', tree.treeModel.nodes);
-    tree.treeModel.update();
-  }
-
-  checkKey ($event) {
-    console.log($event);
+    this.storiesBoard.set( 'stories', tree.treeModel.nodes)
+    .then(() => tree.treeModel.update());
   }
 
   expandAll (tree) {
