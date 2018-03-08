@@ -19,11 +19,11 @@ export class StoryComponent implements OnInit {
     allowDrag: (node) => {
       return true;
     },
-    animateExpand: true,
+    // animateExpand: true,
     nodeClass: (node) => {
       return 'card';
     },
-    useCheckbox: true,
+    // useCheckbox: true,
     idField: '_id',
   };
 
