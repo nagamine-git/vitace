@@ -5,7 +5,10 @@
 
 <tree-root #tree [nodes]="(stories | async)" [options]="options" (moveNode)="updateTree(tree)" class="tree-view">
   <ng-template #treeNodeTemplate let-story let-index="index">
-    <input mdbActive type="text" class="form-control" [(ngModel)]="story.data.name"  (keyup)="changeStoryName($event.target.value, tree, story.data)" [value]="story.data.name">
-    <button (click)="deleteStory(tree, story.data)">x</button>
+    <div [ngClass]="{'doing':checkStatusDoing(story.data.status), 'done':checkStatusDone(story.data.status)}">
+      <input mdbActive type="text" class="form-control" [(ngModel)]="story.data.name"  (keyup)="changeStoryName($event.target.value, tree, story.data)" [value]="story.data.name">
+      <button (click)="deleteStory(tree, story.data)">x</button>
+      <button [(ngModel)]="story.data.status" (click)="changeStatus(tree, story)">●</button>
+    </div>
   </ng-template>
 </tree-root>
